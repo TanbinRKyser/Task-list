@@ -1,0 +1,14 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "A simple task manager app with mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Md. Tanbin Rahid Kyser",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^4.5.0"
+  }
+}
