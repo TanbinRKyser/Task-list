@@ -24,7 +24,6 @@ async function run() {
 
     const options = { ordered: true };
 
-
     db.collection('users').insertMany(
         userList,options, (error, result) => {
         if( error ){
