@@ -16,16 +16,22 @@ async function run() {
 
     const db = client.db( databaseName );
 
-    const collection = db.collection('users').insertOne({
-        'name': 'tusker',
-        'age' : 30
-    },( error, result) => {
+    const userList = [
+        { name: "tusker", age: 30 },
+        { name: "chloe", age: 26 },
+        { name: "theo", age: 24 }
+    ];
+
+    const options = { ordered: true };
+
+
+    db.collection('users').insertMany(
+        userList,options, (error, result) => {
         if( error ){
             return console.log('Unable to insert user');
         }
-
-        console.log( result.acknowledged );
-    });
+        console.log(`${result.insertedCount} documents were inserted`);
+    });   
 
     // the following code examples can be pasted here...
     return 'done.';
