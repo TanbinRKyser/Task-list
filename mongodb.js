@@ -16,25 +16,51 @@ async function run() {
 
     const db = client.db( databaseName );
 
-    const userList = [
+    /*  db.collection('users').insertOne(
+        { name: "tusker", age: 30 }, (error,result)=>{
+            if( error ){
+                console.log("Unable to insert data");
+            }
+            console.log(`${result.insertedId} document was inserted`)
+        }); */
+
+    /* const userList = [
         { name: "tusker", age: 30 },
         { name: "chloe", age: 26 },
         { name: "theo", age: 24 }
     ];
 
     const options = { ordered: true };
-
     db.collection('users').insertMany(
-        userList,options, (error, result) => {
-        if( error ){
-            return console.log('Unable to insert user');
-        }
-        console.log(`${result.insertedCount} documents were inserted`);
-    });   
+        userList,
+        options, 
+        ( error, result ) => {
+            if( error ){
+                return console.log('Unable to insert user');
+            }
 
-    // the following code examples can be pasted here...
-    return 'done.';
+            console.log(`${result.insertedCount} documents were inserted`);
+    });   */ 
+
+    // assignment
+    // insertmany to insert the documents
+    // setup the callbacks
+    // run the script
+    // refresh the database
+    const taskList = [
+        { description: "Learn Javascript", completed: true },
+        { description: "Learn react.js", completed: false },
+    ];
+
+    db.collection('tasks').insertMany(
+        taskList,
+        ( error, result ) => {
+            if( error ){
+                return console.log('Unable to insert user');
+            }
+
+            console.log(`${result.insertedCount} documents were inserted`);
+    });
 }
 
-run().then( console.log )
-    .catch( "Unable to insert data" );
+run().catch( "Unable to insert data" );
