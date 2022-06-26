@@ -20,17 +20,37 @@ async function run() {
 
     const db = client.db( databaseName );
 
-    /* db.collection('users').insertOne({
-        '_id': id,
-        'name': 'tusker',
-        'age': 30
-    }, ( error, result ) => {
+    /* db.collection('users').findOne({name: 'tusker'},( error, user ) => {
         if( error ){
-            console.log( "Unable to insert data" );
+            return console.log('unable to find user');
         }
 
-        console.log(`${result.insertedId} was inserted`);
-    }) */
+        console.log( user );
+    }); */
+
+    /* db.collection('users').find({ _id: new ObjectId('628681fa7ee8e98b51067706') }).toArray( (error, result ) =>{
+        console.log( result );
+    });
+    
+    db.collection('users').find({ _id: new ObjectId('628681fa7ee8e98b51067706') }).count( (error, result ) =>{
+        console.log( result );
+    }); */
+
+    db.collection('tasks').findOne({ _id: new ObjectId('62866bc2f490799ed9229479')}, ( error, task ) =>{
+        if( error ){
+            return console.log('unable to find user');
+        }
+
+        console.log( task );
+    });
+
+    db.collection('tasks').find({ completed: false }).toArray( (error, task ) => {
+        if( error ){
+            console.log("unable to fetch data");
+        }
+
+        console.log( task );
+    });
 }
 
 run();

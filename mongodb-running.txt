@@ -1,0 +1,1 @@
+Programs/mongodb-5.0.7/bin/mongod --dbpath=/home/tusker/Programs/mongodb-data
