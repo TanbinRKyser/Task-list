@@ -20,23 +20,7 @@ async function run() {
 
     const db = client.db( databaseName );
 
-    /* db.collection('users').findOne({name: 'tusker'},( error, user ) => {
-        if( error ){
-            return console.log('unable to find user');
-        }
-
-        console.log( user );
-    }); */
-
-    /* db.collection('users').find({ _id: new ObjectId('628681fa7ee8e98b51067706') }).toArray( (error, result ) =>{
-        console.log( result );
-    });
-    
-    db.collection('users').find({ _id: new ObjectId('628681fa7ee8e98b51067706') }).count( (error, result ) =>{
-        console.log( result );
-    }); */
-
-    db.collection('tasks').findOne({ _id: new ObjectId('62866bc2f490799ed9229479')}, ( error, task ) =>{
+    /* db.collection('tasks').findOne({ _id: new ObjectId('62866bc2f490799ed9229479')}, ( error, task ) =>{
         if( error ){
             return console.log('unable to find user');
         }
@@ -50,6 +34,34 @@ async function run() {
         }
 
         console.log( task );
+    }); */
+
+    /* db.collection('users').updateOne({
+        _id: new ObjectId('628681fa7ee8e98b51067706')
+    },{ 
+        $set:{
+            name: 'Chloe'            
+        },
+        $inc:{
+            age: 1
+        }
+    }).then( ( result ) => {                            // Promise instead of callback
+        console.log( result );
+    }).catch( ( error ) => {
+        console.log( error );
+    }); */
+
+    db.collection('tasks').updateMany(
+        { completed: false },
+        {
+            $set:{
+                completed: true
+            }
+        }
+    ).then( ( result ) => {                            
+        console.log( result );
+    }).catch( ( error ) => {
+        console.log( error );
     });
 }
 
