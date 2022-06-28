@@ -20,49 +20,21 @@ async function run() {
 
     const db = client.db( databaseName );
 
-    /* db.collection('tasks').findOne({ _id: new ObjectId('62866bc2f490799ed9229479')}, ( error, task ) =>{
-        if( error ){
-            return console.log('unable to find user');
-        }
-
-        console.log( task );
-    });
-
-    db.collection('tasks').find({ completed: false }).toArray( (error, task ) => {
-        if( error ){
-            console.log("unable to fetch data");
-        }
-
-        console.log( task );
-    }); */
-
-    /* db.collection('users').updateOne({
-        _id: new ObjectId('628681fa7ee8e98b51067706')
-    },{ 
-        $set:{
-            name: 'Chloe'            
-        },
-        $inc:{
-            age: 1
-        }
-    }).then( ( result ) => {                            // Promise instead of callback
-        console.log( result );
-    }).catch( ( error ) => {
-        console.log( error );
-    }); */
-
-    db.collection('tasks').updateMany(
-        { completed: false },
-        {
-            $set:{
-                completed: true
-            }
-        }
+    db.collection('tasks').deleteOne(
+        { _id: new ObjectId('62b9a9f36df7a5492c8bd28a') }
     ).then( ( result ) => {                            
         console.log( result );
     }).catch( ( error ) => {
         console.log( error );
     });
+
+    /* db.collection('users').deleteOne(
+        { name: 'Tusker' }
+    ).then( ( result ) => {                            
+        console.log( result );
+    }).catch( ( error ) => {
+        console.log( error );
+    }); */
 }
 
 run();
