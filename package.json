@@ -9,6 +9,7 @@
   "author": "Md. Tanbin Rahid Kyser",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^4.5.0"
+    "mongodb": "^4.5.0",
+    "mongoose": "^6.4.1"
   }
 }
