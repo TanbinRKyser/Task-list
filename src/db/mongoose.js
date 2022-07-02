@@ -30,16 +30,28 @@ async function main() {
                     throw new Error('Not a valid email address');
                 }
             }
+        },
+        password: {
+            type: String,
+            required: true,
+            trim: true,
+            minLength: 7,
+            validate( value ){
+                if( value.toLowerCase().includes('password') ){
+                    throw new Error('password is not allowed as password');
+                }
+            }
         }
     });
     
-    const User = mongoose.model('User', userSchema );
+    /* const User = mongoose.model('User', userSchema );
     
     const Pierre = new User({
         name: ' Pierre',
         age: 26,
-        email: 'Pierre1232@gmail.com'
-    })
+        email: 'Pierre1232@gmail.com',
+        password: ' Pierre123'
+    }) 
     
     
     Pierre.save()
@@ -47,29 +59,31 @@ async function main() {
             console.log( Pierre );
         }).catch( ( error ) => {
             console.log(error);
-        });
+        }); */
 
-    /* const taskSchema = new mongoose.Schema({
+    const taskSchema = new mongoose.Schema({
         description: {
-            type: String
+            type: String,
+            trim: true,
+            required: true
         },
         completed: {
-            type: Boolean
+            type: Boolean,
+            default: false
         }
-    });
-
+        });
+        
     const Task = mongoose.model('Task', taskSchema );
 
-    const learnReact = new Task({
-        description: "Learn React.js",
-        completed: true
+    const learnVue = new Task({
+        description: " It's time to learn vue.js, right ?          ",
     });
 
-    learnReact.save().then( ()=>{
-        console.log( learnReact );
+    learnVue.save().then( ()=>{
+        console.log( learnVue );
     }).catch( ( error ) => {
         console.log( error );
-    }); */
+    });
 
 }
 
