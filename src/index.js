@@ -1,6 +1,6 @@
 const express = require('express');
 require('./db/mongoose');
-// const User = require('./models/user');
+const User = require('./models/user');
 const Task = require('./models/task');
 
 const app = express();
@@ -23,7 +23,7 @@ app.use( express.json() );
 
 // create a task model, endpoint and test
 
-app.post('/tasks',( request, response )=>{
+/* app.post('/tasks',( request, response )=>{
 
     const task = new Task( request.body );
 
@@ -32,8 +32,58 @@ app.post('/tasks',( request, response )=>{
     }).catch( ( error ) => {
         response.status(400).send( error );
     });
-});
+}); */
+
+    /* app.get('/users', ( request, response ) => {
+        User.find({
+
+        }).then( ( users ) => {
+            response.send( users );
+        }).catch( ( error ) => {
+            response.status( 500 ).send( error );
+        })
+    }); 
+
+    app.get('/users/:id', ( request, response ) => {
+        // console.log( request.params.id );
+        const _id = request.params.id;
+
+        User.findById( _id )
+            .then( ( user ) => {
+                if( !user ){
+                    return response.status(404).send("User not found")
+                }
+                response.send( user );
+            }).catch( error => {
+                response.status( 500 ).send( error );
+            })
+    }); */
+
+    app.get('/tasks', ( request, response ) => {
+        Task.find({
+
+        }).then( ( tasks ) => {
+            response.send( tasks );
+        }).catch( ( error ) => {
+            response.status( 500 ).send( error );
+        })
+    }); 
+
+    app.get('/tasks/:id', ( request, response ) => {
+        // console.log( request.params.id );
+        const _id = request.params.id;
+
+        Task.findById( _id )
+            .then( ( task ) => {
+                if( !task ){
+                    return response.status(404).send("User not found")
+                }
+                response.send( task );
+            }).catch( error => {
+                response.status( 500 ).send( error );
+            })
+    });
 
 app.listen( port, () => {
     console.log("Server is up on port.");
-})
+}) 
