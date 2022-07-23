@@ -88,11 +88,26 @@ app.get('/users/:id', async ( request, response ) => {
 
 }); */
 
+app.delete('/users/:id', async( request, response ) => {
+    const _id = request.params.id;
+
+    try{
+        const user = await User.findByIdAndDelete( _id );
+
+        if( !user ){
+            return response.status(404).send("User not found")
+        }
+        
+        response.send( user ); 
+    } catch( error ){
+        response.status( 500 ).send( error );
+    }
+});
 
 // create a task model, endpoint and test
 // POST
 
-/* app.post('/tasks', async ( request, response )=>{
+app.post('/tasks', async ( request, response )=>{
 
     const task = new Task( request.body );
 
@@ -131,25 +146,22 @@ app.get('/tasks/:id', async ( request, response ) => {
     } catch( error ){
         response.status( 500 ).send( error );
     }
-}); */
+});
 
 app.patch('/tasks/:id', async ( request, response ) => {
 
     const updates = Object.keys( request.body );
     const allowedProperties = [ 'description', 'completed' ];
-    const validOperations = updates.every( ( update ) => {
-        return allowedProperties.includes( update )    
-    });
+    const validOperations = updates.every( update => allowedProperties.includes( update ) );
 
     if( !validOperations ){
-        response.status( 400 ).send( { error: 'Invalid update property' } );
+        response.status( 400 ).send( { error: 'Invalid update: Property doesn\'t exist' } );
     }
 
-    const _id = request.params.id;
-    const body = request.body;
-
     try{
-        const task = await Task.findByIdAndUpdate( _id, body, { new: true, runValidators: true } );
+        const task = await Task.findByIdAndUpdate( request.params.id, 
+                                                    request.body, 
+                                                    { new: true, runValidators: true } );
 
         if( !task ){
             return response.status( 404 ).send( "Task not found" );
@@ -160,6 +172,21 @@ app.patch('/tasks/:id', async ( request, response ) => {
         response.status( 400 ).send( error );
     }
 
+});
+
+app.delete('/tasks/:id', async( request, response ) => {
+
+    try{
+        const task = await Task.findByIdAndDelete( request.params.id );
+
+        if( !task ){
+            return response.status(404).send("Task not found")
+        }
+        
+        response.send( task ); 
+    } catch( error ){
+        response.status( 500 ).send( error );
+    }
 });
 
 
