@@ -1,17 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/task');
+const auth = require('../middleware/auth');
 
+router.post('/tasks', auth, async ( request, response )=>{
 
-router.post('/tasks', async ( request, response )=>{
-
-    const task = new Task( request.body );
+    const task = new Task( {
+        ...request.body,
+        author: request.user._id
+    } );
 
     try{
         await task.save();
-        response.status(201).send( task );
+        response.status( 201 ).send( task );
     } catch( error ){
-        response.status(400).send( error );
+        response.status( 400 ).send( error );
     }
 
 });

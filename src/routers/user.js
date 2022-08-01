@@ -15,10 +15,9 @@ router.post('/users', async ( request, response ) => {
     //     });
 
         try{
-            const token = await user.generateAuthToken();
             await user.save();
-            
-            response.status( 201 ).send( user );
+            const token = await user.generateAuthToken();
+            response.status( 201 ).send( { user, token } );
         } catch( error ){
             response.status( 400 ).send( error );
         }
@@ -29,8 +28,7 @@ router.post('/users/login', async ( request, response ) => {
         const user = await User.findByCredentials( request.body.email, request.body.password );
 
         const token = await user.generateAuthToken();
-
-        // response.send( user );
+        
         response.send( { user, token } );
     } catch( error ){
         response.status( 400 ).send( error );
@@ -67,25 +65,12 @@ router.get('/user/me', auth, async ( request, response ) => {
     response.send( request.user );
 });
 
-router.get('/users/:id', async ( request, response ) => {
-    // console.log( request.params.id );
-    const _id = request.params.id;
-
-    try{
-        const user = await User.findById( _id );
-        if( !user ){
-            return response.status(404).send("User not found")
-        }
-        response.send( user );
-    } catch( error ){
-        response.status( 500 ).send( error );
-    }
-});
-
-router.patch('/users/:id', async ( request, response ) => {
+router.patch('/users/me', auth, async ( request, response ) => {
 
     const updates = Object.keys( request.body );
+    
     const allowedProperties = [ 'name', 'email', 'password', 'age' ];
+    
     const validOperations = updates.every( ( update ) => {
         return allowedProperties.includes( update )    
     });
@@ -94,41 +79,22 @@ router.patch('/users/:id', async ( request, response ) => {
         response.status( 400 ).send( { error: 'Invalid update property' } );
     }
 
-    const _id = request.params.id;
-    const body = request.body;
-
     try{
+        updates.forEach( update => request.user[ update ] = request.body[ update ] );
 
-        const user = await User.findById( _id );
-        
-        updates.forEach( update => user[ update ] = body[ update ] )
+        await request.user.save();
 
-        await user.save();
-
-        // const user = await User.findByIdAndUpdate( _id, body, { new: true, runValidators: true } );
-
-        if( !user ){
-            return response.status( 404 ).send( "User not found" );
-        }
-
-        response.send( user );
+        response.send( request.user );
     } catch( error ){
         response.status( 400 ).send( error );
     }
 
 }); 
 
-router.delete('/users/:id', async( request, response ) => {
-    const _id = request.params.id;
-
+router.delete('/users/me', auth, async ( request, response ) => {
     try{
-        const user = await User.findByIdAndDelete( _id );
-
-        if( !user ){
-            return response.status(404).send("User not found")
-        }
-        
-        response.send( user ); 
+        await request.user.remove();
+        response.send( request.user ); 
     } catch( error ){
         response.status( 500 ).send( error );
     }

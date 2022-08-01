@@ -50,6 +50,12 @@ const userSchema = new mongoose.Schema({
 });
 
 // user schema
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'author'
+})
+
 userSchema.statics.findByCredentials = async ( email, password ) => {
     
     const user = await User.findOne({ email: email });
@@ -69,7 +75,7 @@ userSchema.statics.findByCredentials = async ( email, password ) => {
 
 userSchema.methods.generateAuthToken = async function(){
     const user = this;
-    const token = jwt.sign({ _id: user._id.toString() }, 'S3cr3t_k3Y)' );
+    const token = jwt.sign({ _id: user._id.toString() }, 'S3cr3t_k3Y' );
 
     user.tokens = user.tokens.concat({ token });
     await user.save();
