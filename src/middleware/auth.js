@@ -9,12 +9,14 @@ const auth = async ( request, response, next ) => {
         const decoded = jwt.verify( token, 'S3cr3t_k3Y');
         
         const user = await User.findOne( {_id: decoded._id, 'tokens.token': token } );
+        
         if( !user ){
             throw new Error();
         }
-        // console.log( user );
+
         request.token = token;
         request.user = user;
+        
         next();
     } catch( error ){
         response.status( 401 ).send( "Please authenticate" );

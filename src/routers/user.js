@@ -3,26 +3,21 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const User = require('../models/user');
 
+// Creating user profile
 router.post('/users', async ( request, response ) => {
 
     const user = new User(request.body);
 
-    // user.save()
-    //     .then( () => {
-    //         response.send( user ) })
-    //     .catch( ( error ) => {
-    //         response.status( 400 ).send( error );
-    //     });
-
-        try{
-            await user.save();
-            const token = await user.generateAuthToken();
-            response.status( 201 ).send( { user, token } );
-        } catch( error ){
-            response.status( 400 ).send( error );
-        }
+    try{
+        await user.save();
+        const token = await user.generateAuthToken();
+        response.status( 201 ).send( { user, token } );
+    } catch( error ){
+        response.status( 400 ).send( error );
+    }
 });
 
+// Logging in
 router.post('/users/login', async ( request, response ) => {
     try{
         const user = await User.findByCredentials( request.body.email, request.body.password );
@@ -35,6 +30,7 @@ router.post('/users/login', async ( request, response ) => {
     }
 });
 
+// Logging out user
 router.post('/users/logout', auth, async ( request, response ) => {
     try{
         request.user.tokens = request.user.tokens.filter( ( token ) => {
@@ -49,6 +45,7 @@ router.post('/users/logout', auth, async ( request, response ) => {
     }
 });
 
+// Logging out user from all sessions.
 router.post('/users/logoutAll', auth, async ( request, response ) => {
     try{
         request.user.tokens = [];
@@ -61,10 +58,12 @@ router.post('/users/logoutAll', auth, async ( request, response ) => {
     }
 });
 
+// Read profile
 router.get('/user/me', auth, async ( request, response ) => {
     response.send( request.user );
 });
 
+// Update user Profile
 router.patch('/users/me', auth, async ( request, response ) => {
 
     const updates = Object.keys( request.body );
