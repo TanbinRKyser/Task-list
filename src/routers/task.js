@@ -22,11 +22,24 @@ router.post('/tasks', auth, async ( request, response )=>{
 });
 
 // READ ALL task
+// GET /tasks?completed=false
 router.get('/tasks', auth, async ( request, response ) => {
+
+    const match = {};
+
+    if( request.query.completed ){
+        // set the completed to boolean from string;
+        match.completed = request.query.completed === 'true';
+    }
 
     try{
         // const tasks = await Task.find( {author: request.user._id} );
-        await request.user.populate('tasks');
+        await request.user.populate({
+            path: 'tasks',
+            // match: { completed: true }
+            match
+        });
+
         // response.send( tasks );
         response.send( request.user.tasks );
     } catch( error ){
