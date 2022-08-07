@@ -117,6 +117,8 @@ const upload = multer({
 
 router.post('/users/me/avatar', upload.single('avatar'), ( request, response ) => {
     response.status(200).send('Uploaded Successfully');
+}, ( error, request, response, next ) => {
+    response.status(400).send({ error: error.message });
 });
 
 
