@@ -101,22 +101,41 @@ router.delete('/users/me', auth, async ( request, response ) => {
     }
 });
 
+
+// File uploading using npm package multer
+const storage = multer.memoryStorage();
+
 const upload = multer({
-    dest: 'avatars',
+    storage: storage,
     limits: {
         fileSize: 1000000
     },
     fileFilter( request, file, fileFilterCallback ){
         if( !file.originalname.match(/\.(jpg|jpeg|png)$/)  ){
-            return fileFilterCallback( new Error('File must be a picture(jpg,jpeg,png)') );
+            return fileFilterCallback( new Error('File must be a picture( jpg, jpeg, png )') );
         }
 
-        fileFilterCallback( undefined, true);
+        fileFilterCallback( undefined, true )
     }
 });
 
-router.post('/users/me/avatar', upload.single('avatar'), ( request, response ) => {
-    response.status(200).send('Uploaded Successfully');
+// uploading the file
+router.post('/users/me/avatar', auth, upload.single('avatar'), async ( request, response ) => {
+    // console.log( request.file.buffer );
+    request.user.avatar = request.file.buffer;
+    await request.user.save();
+
+    response.status(200).send('Avatar uploaded successfully');
+}, ( error, request, response, next ) => {
+    response.status(400).send({ error: error.message });
+});
+
+// removing the avatar
+router.delete('/users/me/avatar', auth, async ( request, response ) => {
+    request.user.avatar = undefined;
+    await request.user.save();
+
+    response.status(200).send('Avatar removed successfully');
 }, ( error, request, response, next ) => {
     response.status(400).send({ error: error.message });
 });
