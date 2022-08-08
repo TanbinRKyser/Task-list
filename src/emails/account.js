@@ -1,25 +1,29 @@
 const sgMail = require('@sendgrid/mail');
 
 
-const sendGridApiKey = 'SGApiKey';
+const sendGridApiKey = 'SendGridApiKey';
 
 sgMail.setApiKey( sendGridApiKey );
 
-const msg = {
-    to: '<<sender>>@gmail.com',
-    from: '<<receiver>>@gmail.com', // Use the email address or domain you verified above
-    subject: 'Sending with Twilio SendGrid is Fun',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-};
+const sendWelcomeEmail = ( email, name ) => {
+    sgMail.send({
+        to: email,
+        from: '<<senderEmail>>@gmail.com',
+        subject: 'Welcome to Tasker',
+        text: `Welcome to Tasker, ${ name }. Thanks for joining us and we look forward to help your progress soon.`
+    })
+}
 
-//ES6
-sgMail
-.send(msg)
-.then(() => {}, error => {
-    console.error(error);
+const sendCancellationEmail = ( email, name ) => {
+    sgMail.send({
+        to: email,
+        from: '<<senderEmail>>@gmail.com',
+        subject: 'Cancellation from Tasker',
+        text: `Sorry to see you go ${ name }. Hope to see you soon.`
+    });
+}
 
-    if (error.response) {
-    console.error(error.response.body)
-    }
-});
+module.exports = {
+    sendWelcomeEmail,
+    sendCancellationEmail
+}
