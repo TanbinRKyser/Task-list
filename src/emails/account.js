@@ -1,14 +1,14 @@
 const sgMail = require('@sendgrid/mail');
 
 
-const sendGridApiKey = 'SendGridApiKey';
+const sendGridApiKey = 'sendGridApiKey';
 
 sgMail.setApiKey( sendGridApiKey );
 
 const sendWelcomeEmail = ( email, name ) => {
     sgMail.send({
         to: email,
-        from: '<<senderEmail>>@gmail.com',
+        from: '<<sender>>@gmail.com',
         subject: 'Welcome to Tasker',
         text: `Welcome to Tasker, ${ name }. Thanks for joining us and we look forward to help your progress soon.`
     })
@@ -17,7 +17,7 @@ const sendWelcomeEmail = ( email, name ) => {
 const sendCancellationEmail = ( email, name ) => {
     sgMail.send({
         to: email,
-        from: '<<senderEmail>>@gmail.com',
+        from: '<<sender>>@gmail.com',
         subject: 'Cancellation from Tasker',
         text: `Sorry to see you go ${ name }. Hope to see you soon.`
     });
