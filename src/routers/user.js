@@ -18,7 +18,9 @@ router.post('/users', async ( request, response ) => {
         sendWelcomeEmail( user.email, user.name );
 
         const token = await user.generateAuthToken();
+
         response.status( 201 ).send( { user, token } );
+        
     } catch( error ){
         response.status( 400 ).send( error );
     }

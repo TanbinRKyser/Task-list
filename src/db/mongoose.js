@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 async function main() {
-    await mongoose.connect('mongodb://localhost:27017/task-manager-api');
+    await mongoose.connect( process.env.MONGODB_URL );
 }
 
 main().catch( err => console.log( err ) );
